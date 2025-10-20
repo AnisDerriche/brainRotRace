@@ -1,7 +1,7 @@
 {
   "name": "brainrotrace",
   "version": "1.0.0",
-  "description": "",
+  "description": "Initialiser le dossier avec :\r     - npm init -y\r     - npm install ws",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
