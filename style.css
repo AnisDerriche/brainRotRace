@@ -58,3 +58,23 @@ body{
         left: 50%;
         transform: translate(-50%, -50%);
 }
+
+.controllerButton{
+        font-size: 25vw;
+        background-color: black;
+        color: antiquewhite;
+        border-radius: 10px;
+}
+
+.controllerButton:active{
+        transform: scale(0.8);
+}
+
+#controllerButtons{
+        display: flex;
+        gap: 20px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+}
