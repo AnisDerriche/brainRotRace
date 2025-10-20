@@ -8,7 +8,7 @@ const HOST = process.env.HOST || '0.0.0.0';
 
 const server = http.createServer((req, res) => {
   let requestPath = req.url.split('?')[0];
-  if (requestPath === '/' || requestPath === '') requestPath = '/game.html';
+  if (requestPath === '/' || requestPath === '') requestPath = '/index.html';
 
   const safePath = path.normalize(requestPath).replace(/^\.+/, '');
   const fullPath = path.join(__dirname, safePath);
