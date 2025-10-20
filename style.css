@@ -1,0 +1,81 @@
+
+#gameCanvas, #textes {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+}
+
+body{
+        background-color: aqua;
+}
+
+#boutons{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+}
+
+.boutons{
+        font-size: 40px;
+        border-radius: 20px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        padding-right: 10px;
+        padding-left: 10px;
+        transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.boutons:hover{
+        filter: brightness(0.8);
+        
+}
+
+.boutons:active{
+        transform: scale(0.8);
+}
+
+#textes{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: aliceblue;
+        background-color: rgba(0, 0, 0, 60%);
+        padding: 20px;
+        border-radius: 20px;
+        gap: 0;
+        font-size: 30px;
+}
+
+#boutonJouer{
+        font-size: 30px;
+        position: absolute;
+        top: 85%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+}
+
+.controllerButton{
+        font-size: 25vw;
+        background-color: black;
+        color: antiquewhite;
+        border-radius: 10px;
+}
+
+.controllerButton:active{
+        transform: scale(0.8);
+}
+
+#controllerButtons{
+        display: flex;
+        gap: 20px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+}
