@@ -112,8 +112,10 @@ class car {
 
 //** Enemy Cars */
 const colors = ["blue", "yellow", "orange", "white", "gray", "cyan"];
+const speed = [1,2,3,4,5];
+const lane = [0,1,2];
 let car_list = [];
-car_list.push(new car(colors[random_between(0, colors.length - 1)], 0, -200, 1));
+car_list.push(new car(colors[random_between(0, colors.length - 1)], lane[random_between(0, lane.length -1)], -200, 2));
 
 
 //** Player Car */
@@ -124,6 +126,7 @@ function draw_road() {
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, road_width, road_height);
 
+    //** draw lines */
     ctx.fillStyle = "white";
     for (let x = 0; x < 2; x++){
         for (let j = 0; j < road_line_number; j++) {
@@ -146,11 +149,19 @@ function render_cars() {
         ctx.fillRect(car_x, c.pos_y, car_width, car_height);
         c.pos_y += c.speed;
     }
+} 
+
+function summon_cars() {
+    if (car_list.length == 0) {
+        car_list.push(new car(colors[random_between(0, colors.length - 1)], 0, -200, speed[random_between(0, speed.length - 1)]));
+    }    
 }
+
 
 function aabb_vs_aabb(player_car, other_car) {  
     return (player_car.road_lane == other_car.road_lane &&
-        player_car.pos_y < other_car.pos_y + car_height);
+        player_car.pos_y < other_car.pos_y + car_height &&
+        other_car.pos_y < player_car.pos_y + car_height);
 }
 
 function simulate_collision(){
