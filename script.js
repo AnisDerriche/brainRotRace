@@ -85,11 +85,11 @@ let road_lane = 0; //!IMPORTANT
 
 //** Road */
 const road_line_number = 20;
-const road_line_space_between = 10;
+const road_line_space_between = 200;
 const road_line_width = 15;
-
-const road_line_height = road_height / road_line_number;
-const single_road_width = (road_width - (road_line_width*2)) / 3;
+const road_line_height = 100;
+const single_road_width = (road_width - (road_line_width * 2)) / 3;
+let road_line_offset = 0;
 
 const player_car_color = "red";
 const car_width = 160;
@@ -97,7 +97,7 @@ const car_height = 200;
 const space_between_car_and_line = (single_road_width - car_width) / 2;
 
 function random_between(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 //** Class Car */
@@ -115,7 +115,6 @@ const colors = ["blue", "yellow", "orange", "white", "gray", "cyan"];
 let car_list = [];
 car_list.push(new car(colors[random_between(0, colors.length - 1)], 0, -200, 1));
 
-
 //** Player Car */
 const player_car_y = 750; //! CAN'T MOVE FOR NOW
 let player_car = new car("red", road_lane, player_car_y, 0);
@@ -125,16 +124,19 @@ function draw_road() {
     ctx.fillRect(0, 0, road_width, road_height);
 
     ctx.fillStyle = "white";
-    for (let x = 0; x < 2; x++){
+    for (let x = 0; x < 2; x++) {
         for (let j = 0; j < road_line_number; j++) {
-            ctx.fillRect(230 * (x+1) + road_line_width * x, (road_line_height + road_line_space_between) * j, road_line_width, road_line_height);
+            const y = ((road_line_height + road_line_space_between) * j + road_line_offset) % ((road_line_height + road_line_space_between) * road_line_number);
+            ctx.fillRect(230 * (x + 1) + road_line_width * x, y, road_line_width, road_line_height);
         }
     }
+
+    road_line_offset += 5;
 }
 
 function render_player_car() {
     ctx.fillStyle = player_car.color;
-    player_car_x = (single_road_width + road_line_width) * player_car.road_lane + space_between_car_and_line
+    const player_car_x = (single_road_width + road_line_width) * player_car.road_lane + space_between_car_and_line;
     ctx.fillRect(player_car_x, player_car.pos_y, car_width, car_height);
 }
 
@@ -148,15 +150,14 @@ function render_cars() {
     }
 }
 
-function aabb_vs_aabb(player_car, other_car) {  
+function aabb_vs_aabb(player_car, other_car) {
     return (player_car.road_lane == other_car.road_lane &&
         player_car.pos_y < other_car.pos_y + car_height);
 }
 
-function simulate_collision(){
-    for (let i = 0; i < car_list.length; i++){
-        if (aabb_vs_aabb(player_car, car_list[i])){
-            document.getElementById('gameOver')
+function simulate_collision() {
+    for (let i = 0; i < car_list.length; i++) {
+        if (aabb_vs_aabb(player_car, car_list[i])) {
             const el = document.createElement('h1');
             el.textContent = 'GAME OVER';
             el.style.position = 'absolute';
@@ -171,14 +172,12 @@ function simulate_collision(){
 }
 
 function game() {
-    if(running){
-        player_car.road_lane = road_lane
+    if (running) {
+        player_car.road_lane = road_lane;
         draw_road();
         render_cars();
         render_player_car();
-
         simulate_collision();
-
         requestAnimationFrame(game);
     }
 }
