@@ -7,7 +7,7 @@ ws.onopen = () => {
 };
 
 ws.onclose = (ev) => {
-    console.log('WebSocket fermé', ev && ev.code ? ev.code : '');
+    console.log('WebSocket fermés', ev && ev.code ? ev.code : '');
 };
 
 ws.onerror = (err) => {
