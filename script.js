@@ -69,6 +69,7 @@ ws.onmessage = async (event) => {
 };
 
 //!------------------------------------------------
+
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -95,10 +96,14 @@ const player_car_color = "red";
 const car_width = 160;
 const car_height = 200;
 const space_between_car_and_line = (single_road_width - car_width) / 2;
+const offset = 20;
+let offset_road_line = 0;
+let last_offset_change = Date.now();
 
+//** Utils */
 function random_between(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+};
 
 //** Class Car */
 class car {
@@ -107,62 +112,97 @@ class car {
         this.road_lane = road_lane;
         this.pos_y = pos_y;
         this.speed = speed;
-    }
-}
+    };
+};
 
 //** Enemy Cars */
+const max_car_on_screen = 3;
 const colors = ["blue", "yellow", "orange", "white", "gray", "cyan"];
 const speed = [1,2,3,4,5];
 const lane = [0,1,2];
 let car_list = [];
-car_list.push(new car(colors[random_between(0, colors.length - 1)], lane[random_between(0, lane.length -1)], -200, 2));
-
+let car_waiting_to_spawn = [];
+let car_spawn = [];
 
 //** Player Car */
 const player_car_y = 750; //! CAN'T MOVE FOR NOW
 let player_car = new car("red", road_lane, player_car_y, 0);
 
+//** Draw Road */
 function draw_road() {
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, road_width, road_height);
 
-    //** draw lines */
+    draw_road_line();
+};
+
+//** Draw Road Lines */
+function draw_road_line() {
+    let offSet = timer_road_line_offset();
     ctx.fillStyle = "white";
     for (let x = 0; x < 2; x++){
         for (let j = 0; j < road_line_number; j++) {
-            ctx.fillRect(230 * (x+1) + road_line_width * x, (road_line_height + road_line_space_between) * j, road_line_width, road_line_height);
-        }
-    }
-}
+            ctx.fillRect(230 * (x+1) + road_line_width * x, (road_line_height + road_line_space_between) * j + offSet, road_line_width, road_line_height);
+        };
+    };
+};
+
+function timer_road_line_offset() {
+    const time = Date.now();
+    if (time - last_offset_change >= 100) {
+        offset_road_line = (offset_road_line === offset) ? 0 : offset;
+        last_offset_change = time;
+    };
+    return offset_road_line;
+};
 
 function render_player_car() {
     ctx.fillStyle = player_car.color;
-    player_car_x = (single_road_width + road_line_width) * player_car.road_lane + space_between_car_and_line
+    let player_car_x = (single_road_width + road_line_width) * player_car.road_lane + space_between_car_and_line;
     ctx.fillRect(player_car_x, player_car.pos_y, car_width, car_height);
-}
+};
+
+function add_cars(nbr) {
+    for (let i = 0; i < nbr; i++) {
+        let random_lane = random_between(0, 2);
+        let new_car = new car(colors[random_between(0, colors.length - 1)], random_lane, -200, speed[random_between(0, speed.length - 1)]);
+        car_list.push(new_car);
+        car_waiting_to_spawn[random_lane] = new_car;
+    };
+};
 
 function render_cars() {
+    //* Add a random car to spawn
+    if (car_list.length < max_car_on_screen) {
+        add_cars(max_car_on_screen - car_list.length);
+    };
+
+    //* Render cars
     for (let i = 0; i < car_list.length; i++) {
         const c = car_list[i];
+
+        //* Delete Cars if out of screen
+        if (c.pos_y > road_height) {
+            car_list.splice(i, 1);
+        };
+
+        //* Render Cars
         const car_x = (single_road_width + road_line_width) * c.road_lane + space_between_car_and_line;
         ctx.fillStyle = c.color;
         ctx.fillRect(car_x, c.pos_y, car_width, car_height);
         c.pos_y += c.speed;
-    }
-} 
+    };
+};
 
-function summon_cars() {
-    if (car_list.length == 0) {
-        car_list.push(new car(colors[random_between(0, colors.length - 1)], 0, -200, speed[random_between(0, speed.length - 1)]));
-    }    
-}
+function verify_car_spawn() {
 
+};
 
 function aabb_vs_aabb(player_car, other_car) {  
     return (player_car.road_lane == other_car.road_lane &&
         player_car.pos_y < other_car.pos_y + car_height &&
         other_car.pos_y < player_car.pos_y + car_height);
-}
+};
 
 function simulate_collision(){
     for (let i = 0; i < car_list.length; i++){
@@ -177,13 +217,13 @@ function simulate_collision(){
             el.style.color = 'red';
             document.body.appendChild(el);
             running = false;
-        }
-    }
-}
+        };
+    };
+};
 
 function game() {
     if(running){
-        player_car.road_lane = road_lane
+        player_car.road_lane = road_lane;
         draw_road();
         render_cars();
         render_player_car();
@@ -191,7 +231,7 @@ function game() {
         simulate_collision();
 
         requestAnimationFrame(game);
-    }
-}
+    };
+};
 
 requestAnimationFrame(game);
