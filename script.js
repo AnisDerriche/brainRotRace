@@ -78,8 +78,8 @@ let running = true;
 //** Set Road and Canvas size */
 const road_width = 720;
 const road_height = 1000;
-canvas.width = road_width;
-canvas.height = road_height;
+//canvas.width = road_width;
+//canvas.height = road_height;
 
 //** Move The Car */
 let road_lane = 0; //!IMPORTANT
