@@ -1,62 +1,125 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
 #gameCanvas, #textes {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
 }
 
-body{
-        background-color: aqua;
+#gameCanvas {
+    background: linear-gradient(to bottom, #87CEEB, #E0F6FF);
 }
 
-#boutons{
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
+#boutons {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    z-index: 10;
 }
 
-.boutons{
-        font-size: 40px;
-        border-radius: 20px;
-        padding-top: 20px;
-        padding-bottom: 20px;
-        padding-right: 10px;
-        padding-left: 10px;
-        transition: transform 0.3s ease, filter 0.3s ease;
+.boutons {
+    font-size: 40px;
+    border-radius: 20px;
+    padding: 20px 30px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-.boutons:hover{
-        filter: brightness(0.8);
-        
+.boutons:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    filter: brightness(1.1);
 }
 
-.boutons:active{
-        transform: scale(0.8);
+.boutons:active {
+    transform: scale(0.95);
 }
 
-#textes{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        color: aliceblue;
-        background-color: rgba(0, 0, 0, 60%);
-        padding: 20px;
-        border-radius: 20px;
-        gap: 0;
-        font-size: 30px;
+#textes {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: 20px;
+    gap: 10px;
+    font-size: 30px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-#boutonJouer{
-        font-size: 30px;
-        position: absolute;
-        top: 85%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+#scores {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 15px 25px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    z-index: 100;
+}
+
+.score {
+    margin: 5px 0;
+}
+
+#boutonJouer {
+    font-size: 30px;
+    position: absolute;
+    top: 85%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    border: none;
+    padding: 20px 40px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+#boutonJouer:hover {
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+#boutonJouer:active {
+    transform: scale(0.95);
 }
 
 .controllerButton{
@@ -66,8 +129,13 @@ body{
         border-radius: 10px;
 }
 
-.controllerButton:active{
-        transform: scale(0.8);
+.controllerButton:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+.controllerButton:active {
+    transform: scale(0.9);
 }
 
 #controllerButtons{
