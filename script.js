@@ -76,10 +76,8 @@ const ctx = canvas.getContext('2d');
 let running = true;
 
 //** Set Road and Canvas size */
-const road_width = 720;
-const road_height = 1000;
-//canvas.width = road_width;
-//canvas.height = road_height;
+const road_width = canvas.width;
+const road_height = canvas.height;
 
 //** Move The Car */
 let road_lane = 0; //!IMPORTANT
@@ -93,9 +91,9 @@ const road_line_height = road_height / road_line_number;
 const single_road_width = (road_width - (road_line_width*2)) / 3;
 
 const player_car_color = "red";
-const car_width = 160;
-const car_height = 200;
-const space_between_car_and_line = (single_road_width - car_width) / 2;
+const space_between_car_and_line = 20;
+const car_width = single_road_width - space_between_car_and_line * 2 ;
+const car_height = 160;
 const offset = 20;
 let offset_road_line = 0;
 let last_offset_change = Date.now();
@@ -125,7 +123,7 @@ let car_waiting_to_spawn = [];
 let car_spawn = [];
 
 //** Player Car */
-const player_car_y = 750; //! CAN'T MOVE FOR NOW
+const player_car_y = road_height - (car_height + 20); //! CAN'T MOVE FOR NOW
 let player_car = new car("red", road_lane, player_car_y, 0);
 
 //** Draw Road */
@@ -142,7 +140,7 @@ function draw_road_line() {
     ctx.fillStyle = "white";
     for (let x = 0; x < 2; x++){
         for (let j = 0; j < road_line_number; j++) {
-            ctx.fillRect(230 * (x+1) + road_line_width * x, (road_line_height + road_line_space_between) * j + offSet, road_line_width, road_line_height);
+            ctx.fillRect(single_road_width * (x+1) + road_line_width * x, (road_line_height + road_line_space_between) * j + offSet, road_line_width, road_line_height);
         };
     };
 };
@@ -175,15 +173,32 @@ function render_cars() {
     //* Add a random car to spawn
     if (car_list.length < max_car_on_screen) {
         add_cars(max_car_on_screen - car_list.length);
+        for (const c of car_list) {
+            if (!car_waiting_to_spawn.includes(c)) car_waiting_to_spawn.push(c);
+        };
     };
 
-    //* Render cars
-    for (let i = 0; i < car_list.length; i++) {
-        const c = car_list[i];
+    //* Manage Car lists
+    for (const c of car_list) {
+        if (car_waiting_to_spawn.includes(c)) {
+            const sameLaneSpawn = car_spawn.some((cs) => cs.road_lane === c.road_lane);
+            if (!sameLaneSpawn) {
+                const idx = car_waiting_to_spawn.indexOf(c);
+                if (idx !== -1) car_waiting_to_spawn.splice(idx, 1);
+                car_spawn.push(c);
+            };
+        };
+    };
+
+    for (let i = car_spawn.length - 1; i >= 0; i--) {
+        const c = car_spawn[i];
 
         //* Delete Cars if out of screen
         if (c.pos_y > road_height) {
-            car_list.splice(i, 1);
+            car_spawn.splice(i, 1);
+            const idxInList = car_list.indexOf(c);
+            if (idxInList !== -1) car_list.splice(idxInList, 1);
+            continue;
         };
 
         //* Render Cars
