@@ -121,7 +121,7 @@ class car {
 };
 
 //** Enemy Cars */
-const max_car_on_screen = 3;
+const max_car_on_screen = 2;
 const colors = ["blue", "yellow", "orange", "white", "gray", "cyan"];
 const speed = [1,2,3,4,5];
 const lane = [0,1,2];
