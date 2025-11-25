@@ -72,8 +72,15 @@ ws.onmessage = async (event) => {
 
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
+const timer = document.getElementById('temps');
+const score = document.getElementById('score');
 
 let running = true;
+let game_score = 0;
+let car_score = 0;
+let last_timer = Date.now();
+let last_score_change = Date.now();
+let in_game_timer = 0;
 
 //** Set Road and Canvas size */
 const road_width = canvas.width;
@@ -198,6 +205,7 @@ function render_cars() {
             car_spawn.splice(i, 1);
             const idxInList = car_list.indexOf(c);
             if (idxInList !== -1) car_list.splice(idxInList, 1);
+            car_score += 100;
             continue;
         };
 
@@ -236,12 +244,30 @@ function simulate_collision(){
     };
 };
 
+function update_timer() {
+    const now = Date.now();
+    in_game_timer = now - last_timer;
+    timer.innerText = `Temps: ${Math.floor(in_game_timer / 1000)}s`;
+};
+
+function update_score() {
+    const time = Date.now();
+    if (time - last_score_change >= 1000) {
+        game_score = in_game_timer * 0.4 + car_score;
+        score.innerText = `Score: ${Math.floor(game_score)} points`;
+        last_score_change = time;
+    };
+};
+
 function game() {
     if(running){
         player_car.road_lane = road_lane;
         draw_road();
         render_cars();
         render_player_car();
+
+        update_timer();
+        update_score();
 
         simulate_collision();
 
