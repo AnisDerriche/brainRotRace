@@ -82,11 +82,9 @@ let last_timer = Date.now();
 let last_score_change = Date.now();
 let in_game_timer = 0;
 
-//** Set Road and Canvas size */
 const road_width = canvas.width;
 const road_height = canvas.height;
 
-//** Move The Car */
 let road_lane = 0; //!IMPORTANT
 
 //** Road */
@@ -105,7 +103,6 @@ const offset = 20;
 let offset_road_line = 0;
 let last_offset_change = Date.now();
 
-//** CHANGEMENT ICI : Préchargement des images */
 const playerImg = new Image();
 playerImg.src = '/asset/img/mainCar.png';
 
@@ -119,7 +116,6 @@ function random_between(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-//** Class Car */
 class car {
     // CHANGEMENT ICI : On passe 'imgSrc' au lieu de 'color'
     constructor(imgSrc, road_lane, pos_y, speed) {
@@ -133,7 +129,6 @@ class car {
 
 //** Enemy Cars */
 const max_car_on_screen = 2;
-// Les couleurs ne servent plus, on utilise enemyImgSources maintenant
 const speed = [1, 2, 3, 4, 5];
 const lane = [0, 1, 2];
 let car_list = [];
@@ -142,8 +137,6 @@ let car_spawn = [];
 
 //** Player Car */
 const player_car_y = road_height - (car_height + 20); //! CAN'T MOVE FOR NOW
-// CHANGEMENT ICI : On ne crée plus une instance de "car" pour le joueur car c'est une image statique gérée différemment
-// Mais on garde l'objet pour la logique de position
 let player_car = { 
     road_lane: road_lane, 
     pos_y: player_car_y 
@@ -178,13 +171,10 @@ function timer_road_line_offset() {
 };
 
 function render_player_car() {
-    // CHANGEMENT ICI : On dessine l'image au lieu du rectangle
     let player_car_x = (single_road_width + road_line_width) * player_car.road_lane + space_between_car_and_line;
-    // On vérifie que l'image est chargée avant de dessiner pour éviter les erreurs
     if (playerImg.complete) {
         ctx.drawImage(playerImg, player_car_x, player_car.pos_y, car_width, car_height);
     } else {
-        // Fallback si l'image ne charge pas (rectangle rouge de sécurité)
         ctx.fillStyle = "red";
         ctx.fillRect(player_car_x, player_car.pos_y, car_width, car_height);
     }
@@ -194,7 +184,6 @@ function render_player_car() {
 function add_cars(nbr) {
     for (let i = 0; i < nbr; i++) {
         let random_lane = random_between(0, 2);
-        // CHANGEMENT ICI : On prend une image aléatoire dans la liste
         let random_img_src = enemyImgSources[random_between(0, enemyImgSources.length - 1)];
         let new_car = new car(random_img_src, random_lane, -200, speed[random_between(0, speed.length - 1)]);
         car_list.push(new_car);
@@ -238,7 +227,6 @@ function render_cars() {
         //* Render Cars
         const car_x = (single_road_width + road_line_width) * c.road_lane + space_between_car_and_line;
         
-        // CHANGEMENT ICI : Dessiner l'image ennemie
         if (c.img.complete) {
             ctx.drawImage(c.img, car_x, c.pos_y, car_width, car_height);
         } else {
