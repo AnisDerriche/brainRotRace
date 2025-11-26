@@ -7,8 +7,8 @@ ws.onopen = () => {
 
 function sendCommand(cmd) {
     if (ws.readyState === WebSocket.OPEN) {
-    ws.send(JSON.stringify({ type: 'command', cmd }));
+        ws.send(JSON.stringify({ type: 'command', cmd }));
     } else {
-    console.warn('WebSocket non ouvert, impossible d\'envoyer', cmd);
+        console.warn('WebSocket non ouvert, impossible d\'envoyer', cmd);
     }
 }
