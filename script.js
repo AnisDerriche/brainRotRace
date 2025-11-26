@@ -125,7 +125,7 @@ class car {
 
 //** Enemy Cars */
 const max_car_on_screen = 2;
-const speed = [1, 2, 3, 4, 5];
+const speed = [3, 4];
 const lane = [0, 1, 2];
 let car_list = [];
 let car_waiting_to_spawn = [];
@@ -232,10 +232,6 @@ function render_cars() {
 
         c.pos_y += c.speed;
     };
-};
-
-function verify_car_spawn() {
-
 };
 
 function aabb_vs_aabb(player_car, other_car) {
