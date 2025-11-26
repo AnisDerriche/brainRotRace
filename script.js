@@ -68,8 +68,6 @@ ws.onmessage = async (event) => {
     }
 };
 
-//!------------------------------------------------
-
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const timer = document.getElementById('temps');
@@ -95,7 +93,6 @@ const road_line_width = 15;
 const road_line_height = road_height / road_line_number;
 const single_road_width = (road_width - (road_line_width * 2)) / 3;
 
-// const player_car_color = "red"; // PLUS BESOIN DE CA
 const space_between_car_and_line = 20;
 const car_width = single_road_width - space_between_car_and_line;
 const car_height = 160;
@@ -117,9 +114,8 @@ function random_between(min, max) {
 };
 
 class car {
-    // CHANGEMENT ICI : On passe 'imgSrc' au lieu de 'color'
     constructor(imgSrc, road_lane, pos_y, speed) {
-        this.img = new Image(); // On crée un objet image pour chaque voiture
+        this.img = new Image(); 
         this.img.src = imgSrc;
         this.road_lane = road_lane;
         this.pos_y = pos_y;
@@ -136,7 +132,7 @@ let car_waiting_to_spawn = [];
 let car_spawn = [];
 
 //** Player Car */
-const player_car_y = road_height - (car_height + 20); //! CAN'T MOVE FOR NOW
+const player_car_y = road_height - (car_height + 20);
 let player_car = { 
     road_lane: road_lane, 
     pos_y: player_car_y 
@@ -230,7 +226,7 @@ function render_cars() {
         if (c.img.complete) {
             ctx.drawImage(c.img, car_x, c.pos_y, car_width, car_height);
         } else {
-            ctx.fillStyle = "blue"; // Fallback couleur
+            ctx.fillStyle = "blue";
             ctx.fillRect(car_x, c.pos_y, car_width, car_height);
         }
 
